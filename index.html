@@ -57,7 +57,7 @@ footer{text-align:center;padding:6px;font-size:13px;background:#fff;border-top:2
  <button id="bNew" class="g" style="display:none"><i class="fa-solid fa-pen"></i> Tạo sơ đồ của bạn</button>
 </header>
 <div id="wrap"><div id="board"><svg id="sv"></svg><div id="pl"></div></div><div id="hint"></div></div>
-<footer id="ft">website xàm by Lộ Nguyệt <i class="fa-solid fa-heart"></i></footer>
+<footer id="ft">Website xàm by Lộ Nguyệt <i class="fa-solid fa-heart"></i></footer>
 <div id="modal"><div class="card" id="mc"></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
@@ -320,9 +320,7 @@ function done(){
 }
 
 /* ---------- Cộng tác realtime ---------- */
-// Muốn phòng cộng tác lưu lâu dài (chủ phòng KHÔNG cần mở tab): dán "Realtime Database URL" của Firebase vào đây.
-// Ví dụ: 'https://ten-du-an-default-rtdb.asia-southeast1.firebasedatabase.app'. Để trống thì dùng chế độ P2P (chủ phòng phải mở tab).
-const FIREBASE_URL='';
+const FIREBASE_URL='https://console.firebase.google.com/project/relation-map-f40cb/database/relation-map-f40cb-default-rtdb/data/~2F';
 const FB=FIREBASE_URL.replace(/\/+$/,''),ME=uid()+uid(),fbUrl=p=>FB+'/rooms/'+fbRoom+p+'.json';
 let mode='',peer=null,conns=[],hostConn=null,isHost=false,synced=false,noSave=false,last={c:{},e:{}},dragId=null,cnt=1,roomLink='',lt=0,es=null,fbRoom='';
 const pushT=()=>{const n=Date.now();if(n-lt>70){lt=n;push()}};
@@ -433,7 +431,7 @@ function applyLang(){
  $('#bCol').innerHTML=ICON('users')+L('Cộng tác','Collab');
  $('#bNew').innerHTML=ICON('pen')+L('Tạo sơ đồ của bạn','Make your own');
  $('#lg').textContent=lang=='en'?'VI':'EN';
- $('#ft').replaceChildren(h('div',{},T('website xàm by Lộ Nguyệt')+' ',ic('heart')),view?h('div',{style:'font-size:11px;opacity:.8'},WM1+' - '+WM2):'');
+ $('#ft').replaceChildren(h('div',{},T('Website xàm by Lộ Nguyệt')+' ',ic('heart')),view?h('div',{style:'font-size:11px;opacity:.8'},WM1+' - '+WM2):'');
 }
 $('#bLang').onclick=()=>{lang=lang=='en'?'vi':'en';try{localStorage.setItem('lang',lang)}catch(e){}close();applyLang();renderNodes();renderEdges();stat()};
 
