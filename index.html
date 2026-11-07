@@ -320,7 +320,7 @@ function done(){
 }
 
 /* ---------- Cộng tác realtime ---------- */
-const FIREBASE_URL='https://console.firebase.google.com/project/relation-map-f40cb/database/relation-map-f40cb-default-rtdb/data/~2F';
+const FIREBASE_URL='https://relation-map-f40cb-default-rtdb.firebaseio.com/';
 const FB=FIREBASE_URL.replace(/\/+$/,''),ME=uid()+uid(),fbUrl=p=>FB+'/rooms/'+fbRoom+p+'.json';
 let mode='',peer=null,conns=[],hostConn=null,isHost=false,synced=false,noSave=false,last={c:{},e:{}},dragId=null,cnt=1,roomLink='',lt=0,es=null,fbRoom='';
 const pushT=()=>{const n=Date.now();if(n-lt>70){lt=n;push()}};
