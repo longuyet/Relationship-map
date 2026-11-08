@@ -36,6 +36,7 @@ button:active{transform:scale(.96)}
 .big{width:76px;height:76px;font-size:32px;align-self:center}
 .desc{white-space:pre-wrap;word-break:break-word;background:#fdf2f6;border-radius:12px;padding:10px}
 small{color:#9d6b82}
+select#bLang{font:inherit;font-weight:600;border:0;border-radius:999px;padding:7px 10px;background:#fce7f0;color:#be185d;cursor:pointer}
 .pt{padding:4px 12px;font:600 13px system-ui,sans-serif;white-space:nowrap}.ph{opacity:.55}
 button.st{background:#fff;border:2px solid #f9c6da;border-radius:12px;padding:3px;line-height:0}button.st.on{border-color:#db2777;background:#fdf2f6}
 footer{text-align:center;padding:6px;font-size:13px;background:#fff;border-top:2px solid #f9c6da;color:#be185d}
@@ -53,7 +54,7 @@ footer{text-align:center;padding:6px;font-size:13px;background:#fff;border-top:2
   <button id="bCol" class="g"><i class="fa-solid fa-users"></i> Cộng tác</button>
   <span id="cst" style="font-size:12px;font-weight:700;color:#be185d"></span>
  </span>
- <button id="bLang" class="g"><i class="fa-solid fa-language"></i> <span id="lg">EN</span></button>
+ <select id="bLang" title="Language"><option value="vi">Tiếng Việt</option><option value="en">English</option><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option></select>
  <button id="bNew" class="g" style="display:none"><i class="fa-solid fa-pen"></i> Tạo sơ đồ của bạn</button>
 </header>
 <div id="wrap"><div id="board"><svg id="sv"></svg><div id="pl"></div></div><div id="hint"></div></div>
@@ -65,10 +66,12 @@ footer{text-align:center;padding:6px;font-size:13px;background:#fff;border-top:2
 const R=25,PAL=['#ec4899','#ef4444','#f97316','#eab308','#22c55e','#14b8a6','#3b82f6','#6366f1','#a855f7','#78350f','#6b7280','#000000'];
 const STY=[['straight','Thẳng'],['zigzag','Zigzag'],['heart','Xoắn tim'],['tangle','Xoắn rối'],['free','Tự vẽ']];
 const $=s=>document.querySelector(s);
-const EN={"+ nhãn": "+ label", "Chọn nhân vật thứ 2 (mũi tên sẽ hướng về nhân vật này)": "Pick the 2nd character (the arrow will point to them)", "Chọn nhân vật thứ 1": "Pick the 1st character", "Cần ít nhất 2 nhân vật": "You need at least 2 characters", "(Chưa có giới thiệu)": "(No description yet)", " Sửa": " Edit", "Xóa nhân vật này?": "Delete this character?", "Xóa": "Delete", "Đóng": "Close", "Cắt ảnh": "Crop image", "Kéo để di chuyển, thanh trượt để phóng to": "Drag to move, use the slider to zoom", "Hủy": "Cancel", " Cắt xong": " Done", "Tên nhân vật *": "Character name *", "Link ảnh (không bắt buộc)": "Image URL (optional)", "Giới thiệu / mô tả nhân vật": "Character introduction / description", "Đang dùng ảnh đã tải lên": "Using the uploaded image", "Đã chọn ảnh ✓": "Image selected ✓", "Không đọc được ảnh này.": "Could not read this image.", "Thêm nhân vật": "Add character", "Sửa nhân vật": "Edit character", "Lưu": "Save", "Nội dung trên mũi tên": "Text on the arrow", "Kiểu mũi tên": "Arrow style", "Màu": "Color", " Vẽ lại": " Redraw", "Xong": "Done", "Dùng ngón tay/chuột vẽ nét từ nhân vật này tới nhân vật kia rồi thả tay": "Draw a stroke from one character to the other, then release", "Đang tạo…": "Generating…", "Link riêng của sơ đồ (dữ liệu nằm ngay trong link):": "Your diagram link (the data is stored inside the link):", " Tải mã QR": " Download QR", "Sơ đồ quá lớn để nhét vào mã QR. Hãy rút gọn nội dung (mô tả ngắn hơn, ít nhân vật hơn) hoặc dùng ảnh/HTML.": "The diagram is too large for a QR code. Shorten the text, use fewer characters, or save as image/HTML instead.", " Chép link": " Copy link", "Lưu ý: ảnh tải lên từ máy không đưa vào QR/link được (quá nặng); nhân vật đó sẽ hiện chữ cái đầu. Dùng link ảnh (URL) để giữ ảnh.": "Note: images uploaded from your device cannot go into the QR/link (too large); those characters will show their initial instead. Use image URLs to keep the pictures.", "Hãy thêm nhân vật trước.": "Add a character first.", "Hoàn tất": "Finish", " Lưu ảnh": " Save image", "Mở file .txt, chép nội dung và dán vào file .html để dùng.": "Open the .txt file, copy its content and paste it into an .html file to use it.", "Quay lại chỉnh sửa": "Back to editing", "Xóa toàn bộ sơ đồ?": "Clear the whole diagram?", "Link không hợp lệ.": "Invalid link.", "Thẳng": "Straight", "Xoắn tim": "Heart curl", "Xoắn rối": "Tangle", "Tự vẽ": "Freehand", "Vẽ tay": "Draw", "Sơ đồ quan hệ": "Relationship map", "Sơ đồ mối quan hệ nhân vật": "Character relationship diagram", "website xàm by Lộ Nguyệt": "a silly website by Lộ Nguyệt"};
+const EN={"+ nhãn": "+ label", "Chọn nhân vật thứ 2 (mũi tên sẽ hướng về nhân vật này)": "Pick the 2nd character (the arrow will point to them)", "Chọn nhân vật thứ 1": "Pick the 1st character", "Cần ít nhất 2 nhân vật": "You need at least 2 characters", "(Chưa có giới thiệu)": "(No description yet)", " Sửa": " Edit", "Xóa nhân vật này?": "Delete this character?", "Xóa": "Delete", "Đóng": "Close", "Cắt ảnh": "Crop image", "Kéo để di chuyển, thanh trượt để phóng to": "Drag to move, use the slider to zoom", "Hủy": "Cancel", " Cắt xong": " Done", "Tên nhân vật *": "Character name *", "Link ảnh (không bắt buộc)": "Image URL (optional)", "Giới thiệu / mô tả nhân vật": "Character introduction / description", "Đang dùng ảnh đã tải lên": "Using the uploaded image", "Đã chọn ảnh ✓": "Image selected ✓", "Không đọc được ảnh này.": "Could not read this image.", "Thêm nhân vật": "Add character", "Sửa nhân vật": "Edit character", "Lưu": "Save", "Nội dung trên mũi tên": "Text on the arrow", "Kiểu mũi tên": "Arrow style", "Màu": "Color", " Vẽ lại": " Redraw", "Xong": "Done", "Dùng ngón tay/chuột vẽ nét từ nhân vật này tới nhân vật kia rồi thả tay": "Draw a stroke from one character to the other, then release", "Đang tạo…": "Generating…", "Link riêng của sơ đồ (dữ liệu nằm ngay trong link):": "Your diagram link (the data is stored inside the link):", " Tải mã QR": " Download QR", "Sơ đồ quá lớn để nhét vào mã QR. Hãy rút gọn nội dung (mô tả ngắn hơn, ít nhân vật hơn) hoặc dùng ảnh/HTML.": "The diagram is too large for a QR code. Shorten the text, use fewer characters, or save as image/HTML instead.", " Chép link": " Copy link", "Lưu ý: ảnh tải lên từ máy không đưa vào QR/link được (quá nặng); nhân vật đó sẽ hiện chữ cái đầu. Dùng link ảnh (URL) để giữ ảnh.": "Note: images uploaded from your device cannot go into the QR/link (too large); those characters will show their initial instead. Use image URLs to keep the pictures.", "Hãy thêm nhân vật trước.": "Add a character first.", "Hoàn tất": "Finish", " Lưu ảnh": " Save image", "Mở file .txt, chép nội dung và dán vào file .html để dùng.": "Open the .txt file, copy its content and paste it into an .html file to use it.", "Quay lại chỉnh sửa": "Back to editing", "Xóa toàn bộ sơ đồ?": "Clear the whole diagram?", "Link không hợp lệ.": "Invalid link.", "Thẳng": "Straight", "Xoắn tim": "Heart curl", "Xoắn rối": "Tangle", "Tự vẽ": "Freehand", "Vẽ tay": "Draw", "Sơ đồ quan hệ": "Relationship map", "Sơ đồ mối quan hệ nhân vật": "Character relationship diagram", "Website xàm by Lộ Nguyệt": "A silly website by Lộ Nguyệt"};
+const ZS={"+ label":"+ 标签","Pick the 2nd character (the arrow will point to them)":"请选择第 2 个角色（箭头将指向该角色）","Pick the 1st character":"请选择第 1 个角色","You need at least 2 characters":"至少需要 2 个角色","(No description yet)":"（暂无介绍）","Edit":"编辑","Delete this character?":"要删除这个角色吗？","Delete":"删除","Close":"关闭","Crop image":"裁剪图片","Drag to move, use the slider to zoom":"拖动移动，用滑块缩放","Cancel":"取消","Done":"确定","Character name *":"角色名称 *","Image URL (optional)":"图片链接（可选）","Character introduction / description":"角色介绍 / 描述","Using the uploaded image":"正在使用已上传的图片","Image selected ✓":"已选择图片 ✓","Could not read this image.":"无法读取这张图片。","Add character":"添加角色","Edit character":"编辑角色","Save":"保存","Text on the arrow":"箭头上的文字","Arrow style":"箭头样式","Color":"颜色","Redraw":"重画","Draw a stroke from one character to the other, then release":"请从一个角色画一笔到另一个角色，然后松开","Generating…":"生成中…","Your diagram link (the data is stored inside the link):":"你的关系图链接（数据已包含在链接中）：","Download QR":"下载二维码","The diagram is too large for a QR code. Shorten the text, use fewer characters, or save as image/HTML instead.":"关系图太大，无法放入二维码。请缩短文字、减少角色，或改存为图片/HTML。","Copy link":"复制链接","Note: images uploaded from your device cannot go into the QR/link (too large); those characters will show their initial instead. Use image URLs to keep the pictures.":"注意：从设备上传的图片无法放入二维码/链接（体积太大），这些角色将显示名字的首字。请使用图片链接（URL）来保留图片。","Add a character first.":"请先添加角色。","Finish":"完成","Save image":"保存图片","Open the .txt file, copy its content and paste it into an .html file to use it.":"打开 .txt 文件，复制其中的内容并粘贴到 .html 文件中即可使用。","Back to editing":"返回编辑","Clear the whole diagram?":"要清除整个关系图吗？","Invalid link.":"链接无效。","Straight":"直线","Heart curl":"爱心缠绕","Tangle":"乱线缠绕","Freehand":"手绘","Draw":"手绘","Zigzag":"锯齿","Relationship map":"关系图","Character relationship diagram":"角色关系图","A silly website by Lộ Nguyệt":"Lộ Nguyệt 做的搞怪小网站","Icon size:":"图标大小：","Max image size is 2MB. This image is":"图片最大 2MB，这张图片是","Could not write to Firebase. Check the databaseURL and the database rules.":"无法写入 Firebase，请检查 databaseURL 和数据库规则（rules）。","This site has no Firebase configured, so it cannot open this room.":"本网站尚未配置 Firebase，无法打开该房间。","Connecting to the room…":"正在连接房间…","online":"在线","Could not load the connection library (PeerJS). Check your network.":"无法加载连接库（PeerJS），请检查网络。","Connection error:":"连接错误：","The host disconnected. You are looking at the last version of the diagram.":"房主已断开连接，你看到的是关系图的最后版本。","Room not found (the host left or the link is wrong).":"找不到房间（房主已退出或链接有误）。","Create a room and share the link. The room is stored online, so you do not need to keep a tab open: anyone with the link can view and edit right away.":"创建房间后把链接发给朋友。房间保存在线上，你无需保持标签页打开：任何拿到链接的人都能立即查看和编辑。","Create a room and share the link. In P2P mode you are the host and must keep this tab open while collaborating. (For rooms that stay online, configure Firebase in index.html.)":"创建房间后把链接发给朋友。在 P2P 模式下你是房主，协作期间必须保持此标签页打开。（想让房间长期保留，请在 index.html 中配置 Firebase。）","Real-time collaboration":"实时协作","Create room":"创建房间","Collaborating":"协作中","Send this link to the people drawing with you:":"把此链接发给一起绘制的人：","The room is stored online; you can close this tab.":"房间保存在线上，你可以关闭此标签页。","people in the room":"人在房间中","Leave room":"离开房间","Character":"角色","Link":"连线","Collab":"协作","Make your own":"制作你自己的关系图"},ZT={"+ label":"+ 標籤","Pick the 2nd character (the arrow will point to them)":"請選擇第 2 個角色（箭頭將指向該角色）","Pick the 1st character":"請選擇第 1 個角色","You need at least 2 characters":"至少需要 2 個角色","(No description yet)":"（暫無介紹）","Edit":"編輯","Delete this character?":"要刪除這個角色嗎？","Delete":"刪除","Close":"關閉","Crop image":"裁剪圖片","Drag to move, use the slider to zoom":"拖動移動，用滑塊縮放","Cancel":"取消","Done":"確定","Character name *":"角色名稱 *","Image URL (optional)":"圖片連結（可選）","Character introduction / description":"角色介紹 / 描述","Using the uploaded image":"正在使用已上傳的圖片","Image selected ✓":"已選擇圖片 ✓","Could not read this image.":"無法讀取這張圖片。","Add character":"新增角色","Edit character":"編輯角色","Save":"儲存","Text on the arrow":"箭頭上的文字","Arrow style":"箭頭樣式","Color":"顏色","Redraw":"重畫","Draw a stroke from one character to the other, then release":"請從一個角色畫一筆到另一個角色，然後鬆開","Generating…":"生成中…","Your diagram link (the data is stored inside the link):":"你的關係圖連結（資料已包含在連結中）：","Download QR":"下載二維碼","The diagram is too large for a QR code. Shorten the text, use fewer characters, or save as image/HTML instead.":"關係圖太大，無法放入二維碼。請縮短文字、減少角色，或改存為圖片/HTML。","Copy link":"複製連結","Note: images uploaded from your device cannot go into the QR/link (too large); those characters will show their initial instead. Use image URLs to keep the pictures.":"注意：從裝置上傳的圖片無法放入二維碼/連結（體積太大），這些角色將顯示名字的首字。請使用圖片連結（URL）來保留圖片。","Add a character first.":"請先新增角色。","Finish":"完成","Save image":"儲存圖片","Open the .txt file, copy its content and paste it into an .html file to use it.":"開啟 .txt 檔案，複製其中的內容並貼上到 .html 檔案中即可使用。","Back to editing":"返回編輯","Clear the whole diagram?":"要清除整個關係圖嗎？","Invalid link.":"連結無效。","Straight":"直線","Heart curl":"愛心纏繞","Tangle":"亂線纏繞","Freehand":"手繪","Draw":"手繪","Zigzag":"鋸齒","Relationship map":"關係圖","Character relationship diagram":"角色關係圖","A silly website by Lộ Nguyệt":"Lộ Nguyệt 做的搞怪小網站","Icon size:":"圖示大小：","Max image size is 2MB. This image is":"圖片最大 2MB，這張圖片是","Could not write to Firebase. Check the databaseURL and the database rules.":"無法寫入 Firebase，請檢查 databaseURL 和資料庫規則（rules）。","This site has no Firebase configured, so it cannot open this room.":"本網站尚未配置 Firebase，無法開啟該房間。","Connecting to the room…":"正在連線房間…","online":"線上","Could not load the connection library (PeerJS). Check your network.":"無法載入連線庫（PeerJS），請檢查網路。","Connection error:":"連線錯誤：","The host disconnected. You are looking at the last version of the diagram.":"房主已斷開連線，你看到的是關係圖的最後版本。","Room not found (the host left or the link is wrong).":"找不到房間（房主已退出或連結有誤）。","Create a room and share the link. The room is stored online, so you do not need to keep a tab open: anyone with the link can view and edit right away.":"建立房間後把連結發給朋友。房間儲存在線上，你無需保持標籤頁開啟：任何拿到連結的人都能立即檢視和編輯。","Create a room and share the link. In P2P mode you are the host and must keep this tab open while collaborating. (For rooms that stay online, configure Firebase in index.html.)":"建立房間後把連結發給朋友。在 P2P 模式下你是房主，協作期間必須保持此標籤頁開啟。（想讓房間長期保留，請在 index.html 中配置 Firebase。）","Real-time collaboration":"即時協作","Create room":"建立房間","Collaborating":"協作中","Send this link to the people drawing with you:":"把此連結發給一起繪製的人：","The room is stored online; you can close this tab.":"房間儲存在線上，你可以關閉此標籤頁。","people in the room":"人在房間中","Leave room":"離開房間","Character":"角色","Link":"連線","Collab":"協作","Make your own":"製作你自己的關係圖"};
 let lang='vi';try{lang=localStorage.getItem('lang')||'vi'}catch(e){}
-const T=k=>lang=='en'&&EN[k]||k,L=(v,e)=>lang=='en'?e:v;
-const WM1='Sơ đồ mối quan hệ nhân vật (character relationship)',WM2='original website made by Lộ Nguyệt (qtwl6688)';
+if(!['vi','en','zh-CN','zh-TW'].includes(lang))lang='vi';
+const tr=e=>{if(lang=='en'||lang=='vi')return e;const m=e.match(/^(\s*)([\s\S]*?)(\s*)$/),v=(lang=='zh-CN'?ZS:ZT)[m[2]];return v?m[1]+v+m[3]:e};
+const T=k=>lang=='vi'?k:tr(EN[k]||k),L=(v,e)=>lang=='vi'?v:tr(e);
 const DS=50,sz=c=>Math.max(30,Math.min(140,+c.s||DS)),rad=c=>sz(c)/2;
 let S={chars:[],edges:[]},view=false,link=false,pick=null,cur={style:'straight',color:'#ec4899'};
 const uid=()=>Math.random().toString(36).slice(2,8);
@@ -244,6 +247,14 @@ function startDraw(e){
 }
 
 /* ---------- Xuất: ảnh / HTML ---------- */
+function wmFrag(mx,y0){
+ const IC={f:'<rect width="12" height="12" rx="3" fill="#1877f2"/><text x="6.3" y="11" text-anchor="middle" font-family="Arial,sans-serif" font-weight="700" font-size="11" fill="#fff">f</text>',
+  x:'<rect width="12" height="12" rx="3" fill="#000"/><path d="M3.2 3.2l5.6 5.6M8.8 3.2L3.2 8.8" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>',
+  i:'<defs><linearGradient id="wmg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".5" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs><rect width="12" height="12" rx="3.5" fill="url(#wmg)"/><rect x="2.6" y="2.6" width="6.8" height="6.8" rx="2" fill="none" stroke="#fff"/><circle cx="6" cy="6" r="1.6" fill="none" stroke="#fff"/><circle cx="8.4" cy="3.6" r=".6" fill="#fff"/>'};
+ const it=[['f','Lộ Nguyệt'],['x','qtwl6888'],['i','qtwl.6688']],ws=it.map(a=>mw(a[1])*11/13),tot=ws.reduce((a,b)=>a+b+16,0)+14*(it.length-1);
+ let x=mx-tot/2,o=`<text x="${mx}" y="${y0+14}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#9d6b82">Original website made by</text>`;
+ it.forEach((a,k)=>{o+=`<g transform="translate(${x.toFixed(1)},${y0+21})">${IC[a[0]]}</g><text x="${(x+16).toFixed(1)}" y="${y0+30}" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#6b4a5a">${esc(a[1])}</text>`;x+=16+ws[k]+14});
+ return o}
 function build(imgs){
  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;const up=(x,y)=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)};
  S.chars.forEach(c=>{const r=rad(c),hw=Math.max(r,Math.min(mw(c.name)+18,170)/2);up(c.x-hw,c.y-r);up(c.x+hw,c.y+r+28)});
@@ -258,10 +269,10 @@ function build(imgs){
    `<circle cx="${c.x}" cy="${c.y}" r="${r}" fill="none" stroke="#fff" stroke-width="3"/><rect x="${c.x-nw/2}" y="${c.y+r+6}" width="${nw}" height="22" rx="11" fill="#fff" stroke="#0002"/><text x="${c.x}" y="${c.y+r+21}" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="13" fill="#2d1b24">${esc(c.name.length>20?c.name.slice(0,19)+'…':c.name)}</text></g>`});
  if(x0>x1){x0=y0=0;x1=y1=100}
  x0-=20;y0-=20;x1+=20;y1+=20;
- if(x1-x0<340){const m=(x0+x1)/2;x0=m-170;x1=m+170}
- const wy=y1;y1+=38;x0=Math.floor(x0);y0=Math.floor(y0);x1=Math.ceil(x1);y1=Math.ceil(y1);
+ if(x1-x0<270){const m=(x0+x1)/2;x0=m-135;x1=m+135}
+ const wy=y1;y1+=40;x0=Math.floor(x0);y0=Math.floor(y0);x1=Math.ceil(x1);y1=Math.ceil(y1);
  const w=x1-x0,hh=y1-y0,mx=(x0+x1)/2,wt=(y,t)=>`<text x="${mx}" y="${y}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#9d6b82">${esc(t)}</text>`;
- return{w,h:hh,svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y0} ${w} ${hh}" width="${w}" height="${hh}"><rect x="${x0}" y="${y0}" width="${w}" height="${hh}" fill="#faf7f8"/>${ed}${nd}${wt(wy+14,WM1)}${wt(wy+28,WM2)}</svg>`};
+ return{w,h:hh,svg:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y0} ${w} ${hh}" width="${w}" height="${hh}"><rect x="${x0}" y="${y0}" width="${w}" height="${hh}" fill="#faf7f8"/>${ed}${nd}${wmFrag(mx,wy)}</svg>`};
 }
 const toData=u=>new Promise(r=>{if(!u)return r(null);if(u.startsWith('data:'))return r(u);const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{try{const cv=document.createElement('canvas');cv.width=cv.height=160;const s=Math.min(im.width,im.height);cv.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,160,160);r(cv.toDataURL('image/jpeg',.85))}catch(e){r(null)}};im.onerror=()=>r(null);im.src=u});
 const dl=(blob,name)=>{const a=h('a',{href:URL.createObjectURL(blob),download:name});document.body.append(a);a.click();a.remove()};
@@ -299,9 +310,9 @@ async function qrBox(){
  const url=location.href.split('#')[0]+'#d='+await enc();
  const li=h('input',{type:'text',readOnly:true,value:url});li.onfocus=()=>li.select();
  box.replaceChildren(h('small',{},T('Link riêng của sơ đồ (dữ liệu nằm ngay trong link):')),li);
- try{const q=qrcode(0,'L');q.addData(url);q.make();const n=q.getModuleCount(),k=6,qw=(n+8)*k,cw=Math.max(qw,360),cv=h('canvas',{width:cw,height:qw+44,style:'align-self:center;max-width:100%;border:1px solid #eee'}),x=cv.getContext('2d'),ox=(cw-qw)/2;
+ try{const q=qrcode(0,'L');q.addData(url);q.make();const n=q.getModuleCount(),k=6,qw=(n+8)*k,cw=Math.max(qw,300),cv=h('canvas',{width:cw,height:qw+44,style:'align-self:center;max-width:100%;border:1px solid #eee'}),x=cv.getContext('2d'),ox=(cw-qw)/2;
   x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#000';for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))x.fillRect(ox+(c+4)*k,(r+4)*k,k,k);
-  x.fillStyle='#6b4a5a';x.font='12px system-ui,sans-serif';x.textAlign='center';x.fillText(WM1,cw/2,qw+8);x.fillText(WM2,cw/2,qw+26);
+  const wi=new Image();wi.onload=()=>x.drawImage(wi,0,qw);wi.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${cw}" height="44">${wmFrag(cw/2,0)}</svg>`);
   box.append(cv,h('button',{onclick:()=>cv.toBlob(b=>dl(b,'qr-so-do.png'))},ic('download'),T(' Tải mã QR')));
  }catch(e){box.append(h('small',{style:'color:#b91c1c'},T('Sơ đồ quá lớn để nhét vào mã QR. Hãy rút gọn nội dung (mô tả ngắn hơn, ít nhân vật hơn) hoặc dùng ảnh/HTML.')))}
  box.append(h('button',{class:'g',onclick:()=>navigator.clipboard&&navigator.clipboard.writeText(url)},ic('copy'),T(' Chép link')));
@@ -320,7 +331,7 @@ function done(){
 }
 
 /* ---------- Cộng tác realtime ---------- */
-const FIREBASE_URL='https://relation-map-f40cb-default-rtdb.firebaseio.com/';
+const FIREBASE_URL='https://relation-map-f40cb-default-rtdb.firebaseio.com';
 const FB=FIREBASE_URL.replace(/\/+$/,''),ME=uid()+uid(),fbUrl=p=>FB+'/rooms/'+fbRoom+p+'.json';
 let mode='',peer=null,conns=[],hostConn=null,isHost=false,synced=false,noSave=false,last={c:{},e:{}},dragId=null,cnt=1,roomLink='',lt=0,es=null,fbRoom='';
 const pushT=()=>{const n=Date.now();if(n-lt>70){lt=n;push()}};
@@ -349,7 +360,7 @@ function applyOps(ops){
  });
  if(rn)renderNodes();renderEdges();
 }
-/* --- Firebase Realtime Database (REST + SSE, không cần SDK) --- */
+/* --- Firebase Realtime Database--- */
 function fbSend(ops){
  const b={};ops.forEach(o=>{b[(o.t.slice(-1)=='c'?'chars/':'edges/')+(o.v?o.v.id:o.id)]=o.v?Object.assign(JSON.parse(JSON.stringify(o.v)),{_by:ME}):null});
  fetch(fbUrl(''),{method:'PATCH',body:JSON.stringify(b)}).catch(()=>{});
@@ -386,7 +397,7 @@ function joinFb(id){
  if(!FB)return alert(L('Trang web này chưa cấu hình Firebase nên không mở được phòng.','This site has no Firebase configured, so it cannot open this room.'));
  noSave=true;mode='fb';fbRoom=id;hint(L('Đang kết nối vào phòng…','Connecting to the room…'));fbListen();
 }
-/* --- P2P (PeerJS): chủ phòng phải giữ tab mở --- */
+/* --- P2P (PeerJS)--- */
 function onMsg(m,from){
  if(!m)return;
  if(m.t=='state'&&m.S){S={chars:(m.S.chars||[]).map(cleanC).filter(Boolean),edges:(m.S.edges||[]).map(cleanE).filter(Boolean)};last=snap();synced=true;cnt=m.n||2;hint('');renderNodes();renderEdges();stat()}
@@ -430,10 +441,10 @@ function applyLang(){
  $('#bDone').innerHTML=ICON('circle-check')+L('Hoàn tất','Finish');
  $('#bCol').innerHTML=ICON('users')+L('Cộng tác','Collab');
  $('#bNew').innerHTML=ICON('pen')+L('Tạo sơ đồ của bạn','Make your own');
- $('#lg').textContent=lang=='en'?'VI':'EN';
- $('#ft').replaceChildren(h('div',{},T('Website xàm by Lộ Nguyệt')+' ',ic('heart')),view?h('div',{style:'font-size:11px;opacity:.8'},WM1+' - '+WM2):'');
+ $('#bLang').value=lang;
+ $('#ft').replaceChildren(h('div',{},T('Website xàm by Lộ Nguyệt')+' ',ic('heart')),view?h('div',{style:'font-size:11px;opacity:.85'},'Original website made by ',h('i',{class:'fa-brands fa-facebook'}),' Lộ Nguyệt  ',h('i',{class:'fa-brands fa-x-twitter'}),' qtwl6888  ',h('i',{class:'fa-brands fa-instagram'}),' qtwl.6688'):'');
 }
-$('#bLang').onclick=()=>{lang=lang=='en'?'vi':'en';try{localStorage.setItem('lang',lang)}catch(e){}close();applyLang();renderNodes();renderEdges();stat()};
+$('#bLang').onchange=ev=>{lang=ev.target.value;try{localStorage.setItem('lang',lang)}catch(e){}close();applyLang();renderNodes();renderEdges();stat()};
 
 /* ---------- Khởi động ---------- */
 $('#bAdd').onclick=()=>form();
